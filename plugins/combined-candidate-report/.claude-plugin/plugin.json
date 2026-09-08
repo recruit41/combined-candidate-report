@@ -1,0 +1,10 @@
+{
+  "name": "combined-candidate-report",
+  "displayName": "Combined Candidate Report",
+  "version": "1.0.0",
+  "description": "Combine a Recruit41 interview evaluation PDF and a Thomas psychometric PDF into one four-page executive hiring report.",
+  "author": { "name": "Recruit41", "url": "https://recruit41.com" },
+  "repository": "https://github.com/recruit41/combined-candidate-report",
+  "license": "MIT",
+  "keywords": ["recruiting", "hiring", "interview", "psychometric", "pdf", "report"]
+}

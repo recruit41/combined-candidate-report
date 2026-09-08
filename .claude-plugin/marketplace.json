@@ -1,0 +1,22 @@
+{
+  "$schema": "https://code.claude.com/schemas/marketplace.json",
+  "name": "recruit41",
+  "owner": {
+    "name": "Recruit41",
+    "url": "https://github.com/recruit41"
+  },
+  "description": "Claude Code skills published by Recruit41",
+  "plugins": [
+    {
+      "name": "combined-candidate-report",
+      "source": "./plugins/combined-candidate-report",
+      "description": "Combine a Recruit41 interview evaluation PDF and a Thomas psychometric PDF into one four-page executive hiring report.",
+      "version": "1.0.0",
+      "author": { "name": "Recruit41", "url": "https://recruit41.com" },
+      "repository": "https://github.com/recruit41/combined-candidate-report",
+      "license": "MIT",
+      "keywords": ["recruiting", "hiring", "interview", "psychometric", "pdf", "report"],
+      "category": "productivity"
+    }
+  ]
+}
