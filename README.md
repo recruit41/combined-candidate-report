@@ -3,11 +3,12 @@
 A [Claude Code](https://code.claude.com) skill that turns two PDFs into one four-page hiring report
 a CEO or CHRO can act on without reading anything else:
 
-1. a **Recruit41 interview evaluation PDF** (behavioural + technofunctional sections from one interview), and
+1. a **Recruit41 interview evaluation PDF** (one interview, whatever sections it evaluated), and
 2. a **Thomas psychometric (PPA / DISC) PDF**.
 
-The report has an executive snapshot with an honest composite score, a leadership lens, a technical
-lens, and a closing page that turns every gap into a question only the hiring leader can answer.
+The report has an executive snapshot with an honest composite score, two evidence lenses labelled
+from whatever the interview actually assessed, and a closing page that turns every gap into a
+question only the hiring leader can answer.
 Everything runs on your own machine. No candidate data leaves it.
 
 ## Install

@@ -1,12 +1,12 @@
 ---
 name: combined-candidate-report
-description: Combine a Recruit41 interview evaluation PDF (behavioural + technical sections from one interview) and a Thomas psychometric PDF into one four-page, executive-ready PDF for a hiring decision. Use when the user points to those two documents and asks for a combined candidate report, 360 report, or hiring decision report.
+description: Combine a Recruit41 interview evaluation PDF and a Thomas psychometric PDF into one four-page, executive-ready PDF for a hiring decision. Use when the user points to those two documents and asks for a combined candidate report, 360 report, or hiring decision report.
 ---
 
 # Combined Candidate Report
 
 Produces a four-page A4 PDF for leadership hiring: an executive summary the CEO/CHRO can act on
-alone, two evidence "lenses" (Leadership & Decision-Making; Technical & Functional Fit), and a
+alone, two evidence pages whose framing follows whatever the interview actually assessed, and a
 closing page that turns every gap into the specific question only the hiring leader, not the AI,
 can answer from their own organisational context.
 
@@ -21,15 +21,21 @@ that folder is `${CLAUDE_PLUGIN_ROOT}`):
 
 ## Inputs (exactly two files, one optional third)
 
-1. **Recruit41 interview evaluation PDF.** One interview covering both a behavioural round and a
-   technofunctional/technical round for a single candidate. Contains section-by-section ratings
-   out of 5, an "Above bar" / "Meets bar" / "Below bar" verdict per sub-criterion, and an AI
-   narrative with direct quotes from the transcript.
+1. **Recruit41 interview evaluation PDF.** One interview for a single candidate, containing one or
+   more evaluated sections. Each section carries a rating out of 5, an "Above bar" / "Meets bar" /
+   "Below bar" verdict per sub-criterion, and an AI narrative with direct quotes from the
+   transcript.
+
+   **Do not expect any particular section to be present, and do not match on section titles.**
+   Section titles and evaluation criteria are generated per role, so the same kind of section is
+   titled differently from one job to the next, and an interview may legitimately contain no
+   behavioural section, or no technical one.
 2. **Thomas psychometric PDF** (PPA / DISC profile). Self Image graph, Work Mask graph, Behaviour
    Under Pressure graph, descriptive words, motivators, general comments.
 3. *(Optional)* **Resume.** Used only for the 4-5 field identity strip on page 1.
 
-If file 1 or 2 is missing, ask for it rather than guessing. If the psychometric report's name
+If file 1 or 2 is missing, ask for it rather than guessing. Do not ask for a "behavioural round"
+or a "technical round" as separate files: both live inside file 1 when they exist at all. If the psychometric report's name
 does not match the candidate's, that is expected in some client workflows (their psychometric
 tool is not integrated). Proceed, but keep the "Sample" banner and flag those lines as
 illustrative everywhere the report cites them.
@@ -42,18 +48,28 @@ illustrative everywhere the report cites them.
    otherwise from whatever the interview report states) current role, one defining prior stint,
    education, years of experience. Never invent an employer name, date, or degree you cannot
    verify from a source. Drop an item rather than guess it.
-3. **Extract behavioural evidence.** Per competency section: the section rating, each
-   sub-criterion rating and verdict, and the 2-4 evidence points under each.
-4. **Extract technical evidence** the same way, from the technofunctional section(s) only. Do not
-   reuse the behavioural section's content here even though it is in the same document.
+3. **Group the evaluated sections by what they assess, not by what they are called.** Read each
+   section's goal and its criteria, ignore introduction and closing, and place it in one of:
+   - **How the candidate works and decides** — past incidents, stakeholder handling, conflict,
+     ownership of decisions, judgement under ambiguity.
+   - **What the candidate knows and can do** — technical or functional depth, knowledge questions,
+     hands-on work, design, case analysis, and verification of past technical delivery.
+
+   A section about past work can fall in either group depending on whether its criteria examine
+   behaviour or technical depth, so decide from the criteria. Record which sections went where;
+   the lens labels and the composite-score caption both depend on it.
+4. **Extract the evidence group by group.** Per section: the section rating, each sub-criterion
+   rating and verdict, and the 2-4 evidence points under each. Keep the groups separate; do not
+   reuse one group's content in the other even though both are in the same document.
 5. **Extract the psychometric read.** Profile description, descriptive words, and any sentence
    about communication style, decision-making style, or stakeholder orientation. These are what
    tend to triangulate against the interview evidence. Thomas reports have no 0-5 score; do not
    invent one.
-6. **Compute the composite score honestly.** Average the behavioural overall rating and the
-   technical-section(s) average. Put the actual formula in `{{COMPOSITE_SCORE_FORMULA}}`
-   (e.g. "Avg. of behavioural & technical scores"). Never label it "N lenses" when only two
-   produce numbers.
+6. **Compute the composite score honestly.** Average the section ratings you actually extracted,
+   and say what you averaged in `{{COMPOSITE_SCORE_FORMULA}}` (e.g. "Avg. of behavioural &
+   technical scores", or "Avg. of the three evaluated sections"). Never describe the score as
+   covering a group that produced no number, and never label it "N lenses" when fewer than N
+   produced numbers.
 7. **Rank gaps correctly.** Before calling anything "the weakest score", list every numeric
    rating you extracted and compare them. Do not assume the technical section is weakest
    because it is discussed last.
@@ -90,6 +106,15 @@ illustrative everywhere the report cites them.
   comment describes; they are not fill-in-the-blank strings. Delete the comment when done.
 - `{{RECOMMENDATION_STATUS}}` and each `{{SCENARIO_N_CHIP}}` take one of `good`, `warning`,
   `critical`. Map Above bar to `good`, Meets bar to `warning`, Below bar to `critical`.
+- The two evidence pages are labelled by `{{LENS1_TITLE}}` / `{{LENS1_BADGE}}` and
+  `{{LENS2_TITLE}}` / `{{LENS2_BADGE}}`. Name them after the groups you actually found, for
+  example "Leadership & Decision-Making" with badge "Behavioural + Psychometric", and
+  "Technical & Functional Fit" with a badge naming the sections that fed it. Do not use the word
+  "technofunctional" unless the source report does.
+- **If the interview produced only one group, do not invent the other.** Give page 2 to the group
+  you have, and use page 3 for the psychometric read triangulated against that same evidence plus
+  the resume-grounded context. Relabel both kickers and badges to say what each page really is,
+  and keep the report at four pages.
 - Scenario cards and condition blocks may be added or removed to match the evidence. Three to
   five conditions is typical.
 - Do not restructure the CSS or the radar-chart script. The `@media print` block is tuned so each
@@ -119,6 +144,12 @@ density, balanced framing, and page-4 style. Do not copy its prose.
   sub-ratings, tag each fact with the rating it came from or split into two bullets.
 - **Résumé reprint.** The identity strip is 4-5 fields for orientation. The report's job is the
   synthesis, not the CV.
+- **Assuming a section exists because past reports had it.** The interview may carry no
+  behavioural section, or no technical one. Report what is there; do not leave a lens half-empty
+  or pad it from the other group.
+- **Matching sections by title.** Titles are generated per role, so "Past Work Experience",
+  "Stakeholder Alignment" and "Plant Leadership" can all be the same kind of section. Classify by
+  the criteria underneath.
 - **Executive summary that previews instead of summarising.** "Pages 2-4 cover X, Y, Z" is a
   table of contents. Page 1 must carry the decision on its own.
 
