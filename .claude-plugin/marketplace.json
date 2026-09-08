@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "combined-candidate-report",
-      "source": "./plugins/combined-candidate-report",
+      "source": "./",
       "description": "Combine a Recruit41 interview evaluation PDF and a Thomas psychometric PDF into one four-page executive hiring report.",
       "version": "1.0.0",
       "author": { "name": "Recruit41", "url": "https://recruit41.com" },

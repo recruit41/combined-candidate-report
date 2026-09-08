@@ -23,7 +23,7 @@ Then, once per machine, install the headless browser used for PDF rendering. Thi
 [`uv`](https://docs.astral.sh/uv/) and downloads Chromium (about 150 MB):
 
 ```bash
-uv run --script ~/.claude/plugins/marketplaces/recruit41/plugins/combined-candidate-report/skills/combined-candidate-report/scripts/make_pdf.py --install
+uv run --script ~/.claude/plugins/marketplaces/recruit41/scripts/make_pdf.py --install
 ```
 
 If Claude reports a Playwright "Executable doesn't exist" error at render time, re-run that command.
@@ -41,15 +41,33 @@ stamped "Sample" and those lines are marked illustrative).
 
 You can also invoke the skill directly with `/combined-candidate-report`.
 
+### Other AI tools (ChatGPT / Codex, Cursor, Copilot, Gemini CLI, and others)
+
+`SKILL.md` follows the open [Agent Skills](https://agentskills.io) format, so this folder works as-is
+in any tool that supports it. There is no marketplace step; clone the repository into the tool's
+skills directory:
+
+```bash
+git clone https://github.com/recruit41/combined-candidate-report.git ~/.agents/skills/combined-candidate-report
+```
+
+`~/.agents/skills` is what the ChatGPT desktop app and Codex read. For other tools, clone into their
+documented user-level skills directory instead. Then run the one-time Chromium install from that
+clone's `scripts/make_pdf.py --install`, put the two PDFs in a folder, and ask for a combined
+candidate report as above.
+
 ## What is in the box
 
 ```
-plugins/combined-candidate-report/skills/combined-candidate-report/
-├── SKILL.md                    extraction rules, writing rules, QA checklist
-├── assets/template.html        report layout, print stylesheet, radar chart
-├── scripts/make_pdf.py         HTML to A4 PDF; refuses to run with unfilled placeholders
-└── examples/example-report.*   a fully worked example for a fictional candidate
+.claude-plugin/                 Claude Code marketplace + plugin manifests
+SKILL.md                        extraction rules, writing rules, QA checklist
+assets/template.html            report layout, print stylesheet, radar chart
+scripts/make_pdf.py             HTML to A4 PDF; refuses to run with unfilled placeholders
+examples/example-report.*       a fully worked example for a fictional candidate
 ```
+
+The repository root is the plugin, and the plugin is a single skill, so the same folder is also a
+drop-in skill for any other tool that reads the Agent Skills format.
 
 The writing rules in `SKILL.md` are the substance: balanced framing on every below-bar rating,
 a composite score that states its own formula, "weakest score" claims checked against every
@@ -60,9 +78,7 @@ number, and page-4 conditions that end on an open question rather than a specula
 Test the renderer against the example (Chromium must be installed, see above):
 
 ```bash
-uv run --script plugins/combined-candidate-report/skills/combined-candidate-report/scripts/make_pdf.py \
-  plugins/combined-candidate-report/skills/combined-candidate-report/examples/example-report.html \
-  /tmp/example-report.pdf
+uv run --script scripts/make_pdf.py examples/example-report.html /tmp/example-report.pdf
 ```
 
 Test the skill locally without publishing:

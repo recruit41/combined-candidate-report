@@ -3,4 +3,4 @@ __pycache__/
 # Never commit candidate data. Reports are generated next to the source PDFs,
 # in the user's own folder, not in this repository.
 *.pdf
-!plugins/combined-candidate-report/skills/combined-candidate-report/examples/*.pdf
+!examples/*.pdf

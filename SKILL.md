@@ -10,8 +10,8 @@ alone, two evidence "lenses" (Leadership & Decision-Making; Technical & Function
 closing page that turns every gap into the specific question only the hiring leader, not the AI,
 can answer from their own organisational context.
 
-Files in this skill (paths are relative to this SKILL.md; when installed as a plugin the skill
-root is `${CLAUDE_PLUGIN_ROOT}/skills/combined-candidate-report/`):
+Files in this skill (paths are relative to this SKILL.md; when installed as a Claude Code plugin
+that folder is `${CLAUDE_PLUGIN_ROOT}`):
 
 | Path | Purpose |
 |---|---|
@@ -71,7 +71,7 @@ illustrative everywhere the report cites them.
     `FILL:` block fresh, and delete the `FILL:` comments. Remove the `.option-note` block unless
     the psychometric name mismatch applies. Fill the `axes` array in the script at the bottom.
 11. **Render.** `uv run --script scripts/make_pdf.py <populated.html> <output.pdf>` (use the
-    absolute path to `make_pdf.py` under the skill root). The script exits with code 2 and lists
+    absolute path to `make_pdf.py` next to this SKILL.md). The script exits with code 2 and lists
     what is missing if any placeholder remains. Output is one A4 page per report section; the
     print CSS already handles pagination, do not add your own page-break logic.
 12. **Sanity-check before handing off**, every time:
