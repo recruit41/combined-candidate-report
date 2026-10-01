@@ -27,7 +27,13 @@ Then, once per machine, install the headless browser used for PDF rendering. Thi
 uv run --script ~/.claude/plugins/marketplaces/recruit41/scripts/make_pdf.py --install
 ```
 
-If Claude reports a Playwright "Executable doesn't exist" error at render time, re-run that command.
+Skip this if Chrome or Chromium is already installed: the renderer uses Playwright's own build
+when present and otherwise falls back to any installed Chromium/Chrome (set `CHROMIUM_PATH` to
+choose one). If Claude reports "No Chromium found" at render time, run the command above.
+
+In hosted sessions (Claude.ai, cloud Claude Code) the report is written to the session's outputs
+folder and attached to the reply as a download, since the session's own filesystem isn't
+reachable from your machine.
 
 ## Use
 
