@@ -89,7 +89,10 @@ illustrative everywhere the report cites them.
 11. **Render.** `uv run --script scripts/make_pdf.py <populated.html> <output.pdf>` (use the
     absolute path to `make_pdf.py` next to this SKILL.md). The script exits with code 2 and lists
     what is missing if any placeholder remains. Output is one A4 page per report section; the
-    print CSS already handles pagination, do not add your own page-break logic.
+    print CSS already handles pagination, do not add your own page-break logic. The script uses
+    Playwright's Chromium if present and otherwise any Chromium/Chrome already installed, so do
+    not run `--install` first in a sandbox that blocks downloads; only run it if the script exits
+    with code 3 ("No Chromium found").
 12. **Sanity-check before handing off**, every time:
     - Every number in the PDF traces to a number in a source PDF.
     - Every quote is verbatim.
@@ -155,6 +158,18 @@ density, balanced framing, and page-4 style. Do not copy its prose.
 
 ## Output
 
-Save the PDF as `<Candidate_Name>_Combined_Candidate_Report.pdf` next to the two source PDFs.
+Name the PDF `<Candidate_Name>_Combined_Candidate_Report.pdf`. Where it goes depends on where the
+session runs:
+
+- **Local session** (Claude Code on the user's machine): save it next to the two source PDFs.
+- **Hosted / cloud session** (the user cannot browse the session's filesystem, e.g. Claude.ai or a
+  cloud Claude Code session): uploaded files usually sit in a read-only folder the user can't
+  reach, so do not save next to them. Write the PDF to the session's outputs folder
+  (`/mnt/user-data/outputs/` on Claude.ai, or whatever outputs directory the environment
+  documents) and deliver it in the same reply that announces the report, using the session's
+  file-sharing tool (e.g. `present_files`) so the user gets a download link without asking for
+  one. Never end a hosted run with only a server-side path.
+
 Offer to delete the intermediate `.html` once the PDF is confirmed; keep it if the user may want
-edits. Never write candidate data into the skill or plugin folder itself.
+edits. In a hosted session keep the `.html` out of the outputs folder unless the user asks for it.
+Never write candidate data into the skill or plugin folder itself.
